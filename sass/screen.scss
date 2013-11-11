@@ -1,0 +1,76 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+@import "compass/reset";
+
+@-webkit-keyframes spinner {
+	from {
+		-webkit-transform: rotate(0deg);
+	}
+	to {
+		-webkit-transform: rotate(359deg);
+	}
+}
+
+@-webkit-keyframes blinker {  
+  from { opacity: 1.0; }
+  to { opacity: 0.0; }
+}
+
+html, body {
+	background: #333;
+	margin: 0;
+	padding: 0;
+}
+
+.settings {
+	width: 250px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: #333;
+
+	.controls {
+		.label {
+			clear: left;
+		}
+	}
+}
+
+#spinner {
+	position: absolute;
+	top: 48%;
+	left: 48%;
+	z-index: 500;
+	text-align: center;
+}
+
+.spinning {
+	-webkit-animation: spinner linear 1s infinite;
+	-webkit-transform-origin: 100% 50%;
+
+	vertical-align: top;
+	margin: auto;
+	position: relative;
+	left: 40%;
+
+}
+
+.blinker {
+	-webkit-animation-name: blinker;  
+	-webkit-animation-iteration-count: infinite;  
+	-webkit-animation-timing-function: cubic-bezier(1.0,0,0,1.0);
+	-webkit-animation-duration: 1s; 
+
+	display: inline-block;
+	font-family: monospace;
+	text-align: center;
+	color: #fff;
+	padding: 3em 0 0 0;
+}
+
+#spinner.back {
+	z-index: -10;
+}

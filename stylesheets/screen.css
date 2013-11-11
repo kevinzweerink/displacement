@@ -1,0 +1,149 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 17, ../../../.rvm/gems/ruby-1.9.3-p286@adv/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* line 22, ../../../.rvm/gems/ruby-1.9.3-p286@adv/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html {
+  line-height: 1;
+}
+
+/* line 24, ../../../.rvm/gems/ruby-1.9.3-p286@adv/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 26, ../../../.rvm/gems/ruby-1.9.3-p286@adv/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 28, ../../../.rvm/gems/ruby-1.9.3-p286@adv/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 30, ../../../.rvm/gems/ruby-1.9.3-p286@adv/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 103, ../../../.rvm/gems/ruby-1.9.3-p286@adv/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 32, ../../../.rvm/gems/ruby-1.9.3-p286@adv/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 116, ../../../.rvm/gems/ruby-1.9.3-p286@adv/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
+@-webkit-keyframes spinner {
+  /* line 9, ../sass/screen.scss */
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+
+  /* line 12, ../sass/screen.scss */
+  to {
+    -webkit-transform: rotate(359deg);
+  }
+}
+
+@-webkit-keyframes blinker {
+  /* line 18, ../sass/screen.scss */
+  from {
+    opacity: 1.0;
+  }
+
+  /* line 19, ../sass/screen.scss */
+  to {
+    opacity: 0.0;
+  }
+}
+
+/* line 22, ../sass/screen.scss */
+html, body {
+  background: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* line 28, ../sass/screen.scss */
+.settings {
+  width: 250px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #333;
+}
+/* line 36, ../sass/screen.scss */
+.settings .controls .label {
+  clear: left;
+}
+
+/* line 42, ../sass/screen.scss */
+#spinner {
+  position: absolute;
+  top: 48%;
+  left: 48%;
+  z-index: 500;
+  text-align: center;
+}
+
+/* line 50, ../sass/screen.scss */
+.spinning {
+  -webkit-animation: spinner linear 1s infinite;
+  -webkit-transform-origin: 100% 50%;
+  vertical-align: top;
+  margin: auto;
+  position: relative;
+  left: 40%;
+}
+
+/* line 61, ../sass/screen.scss */
+.blinker {
+  -webkit-animation-name: blinker;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: cubic-bezier(1, 0, 0, 1);
+  -webkit-animation-duration: 1s;
+  display: inline-block;
+  font-family: monospace;
+  text-align: center;
+  color: #fff;
+  padding: 3em 0 0 0;
+}
+
+/* line 74, ../sass/screen.scss */
+#spinner.back {
+  z-index: -10;
+}

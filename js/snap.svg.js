@@ -663,7 +663,7 @@ var mina = (function (eve) {
             y = -Q - q,
             Y = Math.pow(Math.abs(y), 1 / 3) * (y < 0 ? -1 : 1),
             t = X + Y + .5;
-        return (1 - t) * 3 * t * t + t * t * t;
+        return (1 - t) * 3 * t * t + t * t * t * t * t;
     };
     /*\
      * mina.backin

@@ -47,7 +47,10 @@ var Point = function(x, y) {
 		},
 
 		lt : function(comparator) {
-			if (Math.abs(this.x) < Math.abs(comparator.x) || Math.abs(this.y) < Math.abs(comparator.y)) {
+			var thisMag = Math.sqrt((this.x * this.x) + (this.y * this.y));
+			var thatMag = Math.sqrt((comparator.x * comparator.x) + (comparator.y * comparator.y))
+
+			if (Math.abs(thisMag) < Math.abs(thatMag)) {
 				return true;
 			} else {
 				return false;
@@ -83,6 +86,7 @@ var Displace = function() {
 		// Container of the grid collection, return value of grid() will be assigned
 		gridCollection : new Array(),
 		newGridCollection : new Array(),
+		oldGridCollection : new Array(),
 
 		shape : false,
 
@@ -96,10 +100,60 @@ var Displace = function() {
 
 		trueCenter : false,
 
-		calculationsComplete : new Event('calculated'),
-		shapeLoaded : new Event('shape'),
-
 		loader : document.getElementById("spinner"),
+
+		init : function() {
+			var hash = window.location.hash.substring(1);
+
+			this.trueCenter = Point(parseInt(this.canvas.attr("width"))/2, parseInt(this.canvas.attr("height"))/2);
+			this.gridCollection = this.grid();
+			this.oldGridCollection = this.cloneGrid(this.gridCollection);
+			this.place(Paths[hash]);
+			var _this = this;
+
+			console.log(this.canvas);
+
+			this.canvas.shapeLoaded = new Event('shape');
+			this.canvas.calculated = new Event('calculated');
+			this.canvas.pushed = new Event('pushed');
+			this.canvas.pulled = new Event('pulled');
+
+			
+		},
+
+		cloneGrid : function(arr) {
+			var returnArr = new Array();
+			console.log(arr);
+			for (var i = 0; i < arr.length; i+=1) {
+				var oldPoint = arr[i];
+				returnArr[i] = Point(oldPoint.attr("cx"), oldPoint.attr("cy"));
+			}
+
+			return returnArr;
+		},
+
+		pushOut : function() {
+			var _this = this;
+			window.addEventListener('shape', function(e) {
+				_this.displace();
+			});
+
+			window.addEventListener('calculated', function(e) {
+				_this.anim();
+			});
+
+			window.addEventListener('pushed', function(e) {
+				window.setTimeout(function(self) {
+					_this.reset();
+				}, 10000, _this);
+			});
+
+			window.addEventListener('pulled', function(e) {
+				window.setTimeout(function(self) {
+					_this.anim();
+				}, 5000, _this);
+			})
+		},
 
 		// Creates the grid of circles, returns an array containing all circles as Snap objects
 		// Internal use only, probably
@@ -128,10 +182,19 @@ var Displace = function() {
 
 		place : function(path) {
 			var _this = this;
+
 			Snap.load(path, function(p) {
 
-				path = p.select("path").attr("d");
-				var shape = _this.canvas.path(path);
+				var path;
+				var shape;
+				if (p.select("path")) {
+					path = p.select("path").attr("d");
+					shape = _this.canvas.path(path);
+				} else {
+					path = p.select("polygon").attr("points");
+					shape = _this.canvas.polygon(path);
+				}
+				
 				var bbox = shape.getBBox();
 
 				var pHeight = parseInt(bbox.height);
@@ -171,6 +234,48 @@ var Displace = function() {
 			return coords;
 		},
 
+		calculateOffset : function(vector, path, original, callback) {
+
+			console.log(vector, original);
+
+			while(Snap.path.isPointInside(path, vector.x + this.bboxCenter.x, vector.y + this.bboxCenter.y)) {
+				vector.mult(50000);
+			}
+			vector.div(50000);
+
+			while(Snap.path.isPointInside(path, vector.x + this.bboxCenter.x, vector.y + this.bboxCenter.y)) {
+				vector.mult(5000);
+			}
+			vector.div(5000);
+
+			while(Snap.path.isPointInside(path, vector.x + this.bboxCenter.x, vector.y + this.bboxCenter.y)) {
+				vector.mult(500);
+			}
+			vector.div(500);
+
+			while(Snap.path.isPointInside(path, vector.x + this.bboxCenter.x, vector.y + this.bboxCenter.y)) {
+				vector.mult(50);
+			}
+			vector.div(50);
+
+			while(Snap.path.isPointInside(path, vector.x + this.bboxCenter.x, vector.y + this.bboxCenter.y)) {
+				vector.mult(5);
+			}
+			vector.div(5);
+
+			while(Snap.path.isPointInside(path, vector.x + this.bboxCenter.x, vector.y + this.bboxCenter.y)) {
+				vector.mult(1.5);
+			}
+			vector.div(1.5);
+
+			while(Snap.path.isPointInside(path, vector.x + this.bboxCenter.x, vector.y + this.bboxCenter.y)) {
+				vector.mult(1.05);
+			}
+
+			callback(vector);
+
+		},
+
 		displace : function() {
 			var shape = this.shape;
 			var path = shape.realPath;
@@ -183,7 +288,7 @@ var Displace = function() {
 				var dot = this.gridCollection[i], // Current pos
 					coords = Point(parseInt(dot.attr("cx")), parseInt(dot.attr("cy"))); // position of current circle
 					coords.sub(this.bboxCoords);
-					isInsideBox = Snap.path.isPointInsideBBox(bbox, coords.x, coords.y); // Prelim check for containment in bounding box of shape
+				var isInsideBox = Snap.path.isPointInsideBBox(bbox, coords.x, coords.y); // Prelim check for containment in bounding box of shape
 					
 				if (isInsideBox) {
 
@@ -192,15 +297,13 @@ var Displace = function() {
 					if(isInside){
 
 						// Calculate the unit vector for the offset from the center position
-						var vector = this.calculateUnitVector(coords);
+						var vector = this.calculateUnitVector(Point(coords.x, coords.y));
 						var _this = this; //cache this for use within other functions and objects
-
-						while(Snap.path.isPointInside(path, vector.x + this.bboxCenter.x, vector.y + this.bboxCenter.y)) {
-							// While the point still is inside the shape, multiply it's coordinates to push it out along a radius from the center
-							vector.mult(1.05);
-						}
-
-						this.newGridCollection[i] = Point(vector.x + _this.trueCenter.x, vector.y + _this.trueCenter.y)
+						
+						this.calculateOffset(vector, path, coords, function(vector) {
+							_this.newGridCollection[i] = Point(vector.x + _this.trueCenter.x, vector.y + _this.trueCenter.y)
+						});
+						
 					} else {
 						this.newGridCollection[i] = this.gridCollection[i];
 					}
@@ -220,34 +323,30 @@ var Displace = function() {
 					this.gridCollection[i].animate({
 						"cx" : _this.newGridCollection[i].x,
 						"cy" : _this.newGridCollection[i].y,
-					}, 3000, mina.easeinout);
+					}, 3000, mina.elastic);
 				}
 			}
+
+			window.dispatchEvent(this.canvas.pushed);
 		},
 
-		init : function() {
-			var hash = window.location.hash.substring(1);
+		reset : function() {
+			console.log("move back");
+			for(var i = 0; i<this.gridCollection.length; i+=1) {
+				if (this.gridCollection[i] != this.oldGridCollection[i]) {
+					var _this = this;
+					this.gridCollection[i].animate({
+						"cx" : _this.oldGridCollection[i].x,
+						"cy" : _this.oldGridCollection[i].y,
+					}, 3000, mina.elastic);
+				}
+			}
 
-			this.trueCenter = Point(parseInt(this.canvas.attr("width"))/2, parseInt(this.canvas.attr("height"))/2);
-			this.gridCollection = this.grid();
-			this.place(Paths[hash]);
-			var _this = this;
-
-			console.log(this.canvas);
-
-			this.canvas.shapeLoaded = new Event('shape');
-			this.canvas.calculated = new Event('calculated');
-
-			window.addEventListener('shape', function(e) {
-				_this.displace();
-			})
-
-			window.addEventListener('calculated', function(e) {
-				_this.anim();
-			})
+			window.dispatchEvent(this.canvas.pulled);
 		}
 
 	}
 }
 var Canvas = Displace();
 Canvas.init();
+Canvas.pushOut();

@@ -16,11 +16,6 @@ var MathHelp = {
 	}
 }
 
-var easing = function (x, t, b, c, d) {
-	if ((t/=d/2) < 1) return c/2*t*t*t*t*t + b;
-	return c/2*((t-=2)*t*t*t*t + 2) + b;
-}
-
 var Point = function(x, y) {
 
 	return {
@@ -69,7 +64,9 @@ var Paths = {
 	l : ImgPath + "l.svg",
 	a : ImgPath + "a.svg",
 	c : ImgPath + "c.svg",
-	e : ImgPath + "e.svg"
+	e : ImgPath + "e.svg",
+	o : ImgPath + "o.svg",
+	k : ImgPath + "k.svg"
 }
 
 var Displace = function() {
@@ -78,7 +75,7 @@ var Displace = function() {
 		canvas : Snap(),
 
 		// Diameter of particles
-		d : 1,
+		d : 0.5,
 
 		// Space between particles by default
 		s : 10,

@@ -93,7 +93,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 
 /* line 22, ../sass/screen.scss */
 html, body {
-  background: #333;
+  background: #161616;
   margin: 0;
   padding: 0;
 }
@@ -104,7 +104,7 @@ html, body {
   position: absolute;
   top: 0;
   left: 0;
-  background: #333;
+  background: #161616;
 }
 /* line 36, ../sass/screen.scss */
 .settings .controls .label {

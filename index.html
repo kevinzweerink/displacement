@@ -41,14 +41,14 @@
 
         <div class="nav">
             <ul>
-                <li><a href="http://kevinzweerink.github.io/displacement/#d">D</a></li>
-                <li><a href="http://kevinzweerink.github.io/displacement/#i">I</a></li>
-                <li><a href="http://kevinzweerink.github.io/displacement/#s">S</a></li>
-                <li><a href="http://kevinzweerink.github.io/displacement/#p">P</a></li>
-                <li><a href="http://kevinzweerink.github.io/displacement/#l">L</a></li>
-                <li><a href="http://kevinzweerink.github.io/displacement/#a">A</a></li>
-                <li><a href="http://kevinzweerink.github.io/displacement/#c">C</a></li>
-                <li><a href="http://kevinzweerink.github.io/displacement/#e">E</a></li>
+                <li><a href="#d">D</a></li>
+                <li><a href="#i">I</a></li>
+                <li><a href="#s">S</a></li>
+                <li><a href="#p">P</a></li>
+                <li><a href="#l">L</a></li>
+                <li><a href="#a">A</a></li>
+                <li><a href="#c">C</a></li>
+                <li><a href="#e">E</a></li>
             </ul>
         </div>
 
@@ -61,4 +61,24 @@
 
     <script src="js/snap.svg-min.js"></script>
     <script src="js/main.js"></script>
+
+    <script>
+        // var aTags = document.getElementsByTagName("a");
+
+        // for(var i = 0; i < aTags.length; i++) {
+        //     var link = aTags[i];
+
+        //     link.onclick = function() {
+        //         var href = this.getAttribute("href");
+
+        //         window.location.hash = href;
+        //         window.reload(true);
+        //     }
+        // }
+
+        window.onhashchange = function() {
+            window.location.reload();
+        }
+
+    </script>
 </html>
